@@ -1852,8 +1852,14 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
-.PHONY: otapackage
+THEWIZ_TARGET_PACKAGE := $(PRODUCT_OUT)/thewiz-$(ANDROID_NAME)-$(ROM_VERSION).zip
+
+.PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
+bacon: otapackage
+	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(THEWIZ_TARGET_PACKAGE)
+	$(hide) $(MD5SUM) $(THEWIZ_TARGET_PACKAGE) > $(THEWIZ_TARGET_PACKAGE).md5sum
+	@echo "Package Complete: $(THEWIZ_TARGET_PACKAGE)"
 
 endif    # build_ota_package
 
